@@ -13,15 +13,13 @@ function! HieratimeFoldText()
   return getline(v:foldstart) . "..."
 endfunction
 
-pyf /path/to/hieratime.py
+py sys.path.insert(0, '/path/to/hieratime/')
+py from hieratime import vim_integration as hieratime
 augroup Hieratime
   autocmd!
   autocmd BufRead *.hieratime setlocal foldmethod=expr foldexpr=HieratimeFold() foldtext=HieratimeFoldText() fillchars=vert\:\|,fold:\ 
-  " The following highlighting change may possibly affect other buffers. To be
-  " tested/fixed.
   autocmd BufRead *.hieratime highlight Folded guibg=bg guifg=fg
-  autocmd BufRead *.hieratime nnoremap <buffer> <C-H><C-I> :py vim_clock_in()<CR>
-  autocmd BufRead *.hieratime nnoremap <buffer> <C-H><C-O> :py vim_clock_out()<CR>
-  autocmd BufRead *.hieratime nnoremap <buffer> <C-H><C-H> :py vim_refresh()<CR>
+  autocmd BufRead *.hieratime nnoremap <buffer> <C-H><C-I> :py hieratime.clock_in()<CR>
+  autocmd BufRead *.hieratime nnoremap <buffer> <C-H><C-O> :py hieratime.clock_out()<CR>
+  autocmd BufRead *.hieratime nnoremap <buffer> <C-H><C-H> :py hieratime.refresh()<CR>
 augroup end
-
