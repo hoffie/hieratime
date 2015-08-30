@@ -12,7 +12,9 @@ def refresh():
 
 
 def clock_in():
-    node = node_under_cursor()
+    tree = get_tree()
+    try_clock_out(tree)
+    node = node_under_cursor(tree)
     if not node:
         error("unable to map current line to node")
         return
@@ -20,6 +22,14 @@ def clock_in():
     root = node.get_root()
     update(root)
     msg("clocked in")
+
+def try_clock_out(tree=None):
+    tree = tree or get_tree()
+    try:
+        clock = tree.get_running_clock()
+    except NoRunningClockError:
+        return
+    clock.finish()
 
 
 def clock_out():
@@ -36,8 +46,8 @@ def clock_out():
     msg("clocked out")
 
 
-def node_under_cursor():
-    tree = get_tree()
+def node_under_cursor(tree=None):
+    tree = tree or get_tree()
     lineidx = vim.current.window.cursor[0]
     return tree.node_by_line(lineidx)
 
