@@ -4,25 +4,25 @@ from .parser import parse_lines
 from .clock import Clock
 
 
-def vim_refresh():
+def refresh():
     new = parse_lines(vim.current.buffer[:])
-    vim_update(new)
+    update(new)
     msg("refreshed")
 
 
-def vim_clock_in():
-    node = vim_node_under_cursor()
+def clock_in():
+    node = node_under_cursor()
     if not node:
         error("unable to map current line to node")
         return
     node.clocks.insert(0, Clock())
     root = node.get_root()
-    vim_update(root)
+    update(root)
     msg("clocked in")
 
 
-def vim_clock_out():
-    tree = vim_get_tree()
+def clock_out():
+    tree = get_tree()
     try:
         clock = tree.get_running_clock()
     except Exception as e:
@@ -30,24 +30,24 @@ def vim_clock_out():
         return
     clock.finish()
     root = clock.get_root()
-    vim_update(root)
+    update(root)
     vim.current.window.cursor = (clock.lineidx, 999)
     msg("clocked out")
 
 
-def vim_node_under_cursor():
-    tree = vim_get_tree()
+def node_under_cursor():
+    tree = get_tree()
     lineidx = vim.current.window.cursor[0]
     return tree.node_by_line(lineidx)
 
 
-def vim_update(new):
+def update(new):
     new_s = str(new)
     if '\n'.join(vim.current.buffer) != new_s:
         vim.current.buffer[:] = new_s.split('\n')
 
 
-def vim_get_tree():
+def get_tree():
     return parse_lines(vim.current.buffer[:])
 
 
