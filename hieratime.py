@@ -1,3 +1,4 @@
+import sys
 import re
 from math import floor
 from datetime import datetime
@@ -177,20 +178,25 @@ def vim_refresh():
 def vim_clock_in():
     node = vim_node_under_cursor()
     if not node:
-        raise vim.error("unable to map current line to node")
+        sys.stderr.write("hiera: unable to map current line to node\n")
+        return
     node.clocks.insert(0, Clock())
     root = get_root(node)
     vim_update(root)
-    print("hiera clocked in")
+    print("hiera: clocked in")
 
 def vim_clock_out():
     tree = vim_get_tree()
-    clock = get_running_clock(tree)
+    try:
+        clock = get_running_clock(tree)
+    except Exception as e:
+        sys.stderr.write("hiera: %s\n" % e)
+        return
     clock.finish()
     root = get_root(clock)
     vim_update(root)
     vim.current.window.cursor = (clock.lineidx, 999)
-    print("hiera clocked out")
+    print("hiera: clocked out")
 
 def get_root(node):
     root = node
