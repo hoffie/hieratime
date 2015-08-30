@@ -15,6 +15,7 @@ endfunction
 
 py sys.path.insert(0, '/path/to/hieratime/')
 py from hieratime import vim_integration as hieratime
+py reload(hieratime)
 augroup Hieratime
   autocmd!
   autocmd BufRead *.hieratime setlocal foldmethod=expr foldexpr=HieratimeFold() foldtext=HieratimeFoldText() fillchars=vert\:\|,fold:\ 
