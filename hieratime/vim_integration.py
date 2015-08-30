@@ -7,18 +7,18 @@ from .clock import Clock
 def vim_refresh():
     new = parse_lines(vim.current.buffer[:])
     vim_update(new)
-    msg("hiera refreshed")
+    msg("refreshed")
 
 
 def vim_clock_in():
     node = vim_node_under_cursor()
     if not node:
-        sys.stderr.write("hiera: unable to map current line to node\n")
+        error("unable to map current line to node")
         return
     node.clocks.insert(0, Clock())
     root = node.get_root()
     vim_update(root)
-    msg("hiera: clocked in")
+    msg("clocked in")
 
 
 def vim_clock_out():
@@ -32,7 +32,7 @@ def vim_clock_out():
     root = clock.get_root()
     vim_update(root)
     vim.current.window.cursor = (clock.lineidx, 999)
-    msg("hiera: clocked out")
+    msg("clocked out")
 
 
 def vim_node_under_cursor():
