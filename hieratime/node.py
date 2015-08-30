@@ -11,6 +11,9 @@ def is_text(line):
     return not HEADING_RE.match(line)
 
 
+class NoRunningClockError(Exception): pass
+
+
 class Node(BaseNode):
     parent = None
 
@@ -78,4 +81,4 @@ class Node(BaseNode):
                     return clock
             if cur.children:
                 todo += cur.children
-        raise Exception("unable to find a running clock")
+        raise NoRunningClockError("unable to find a running clock")

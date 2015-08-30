@@ -2,6 +2,7 @@ import sys
 import vim
 from .parser import parse_lines
 from .clock import Clock
+from .node import NoRunningClockError
 
 
 def refresh():
@@ -25,7 +26,7 @@ def clock_out():
     tree = get_tree()
     try:
         clock = tree.get_running_clock()
-    except Exception as e:
+    except NoRunningClockError as e:
         error(e)
         return
     clock.finish()
