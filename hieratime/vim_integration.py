@@ -67,4 +67,4 @@ def msg(msg):
 
 
 def error(msg):
-    sys.stderr.write("hiera: " + msg + "\n")
+    sys.stderr.write("hiera: " + str(msg) + "\n")
