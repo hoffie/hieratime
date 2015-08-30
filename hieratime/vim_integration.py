@@ -1,5 +1,6 @@
 import sys
 import vim
+from difflib import SequenceMatcher
 from .parser import parse_lines
 from .clock import Clock
 from .node import NoRunningClockError
@@ -53,9 +54,19 @@ def node_under_cursor(tree=None):
 
 
 def update(new):
-    new_s = str(new)
-    if '\n'.join(vim.current.buffer) != new_s:
-        vim.current.buffer[:] = new_s.split('\n')
+    new = str(new).split('\n')
+    diff = SequenceMatcher(a=vim.current.buffer, b=new)
+    offset = 0
+    for action, i1, i2, j1, j2 in diff.get_opcodes():
+        if action == 'replace':
+            vim.current.buffer[i1 + offset:i2 + offset] = new[j1:j2]
+            offset -= i2 - i1 - (j2 - j1)
+        elif action == 'insert':
+            vim.current.buffer[i1 + offset:i2 + offset] = new[j1:j2]
+            offset += j2 - j1
+        elif action == 'delete':
+            del vim.current.buffer[i1 + offset:i2 + offset]
+            offset -= i2 - i1
 
 
 def get_tree():
