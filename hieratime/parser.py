@@ -22,9 +22,9 @@ def parse_lines(lines):
             cur.clocks[-1].notes.append(line.strip())
             continue
         node = Node.from_line(line, lineidx=lineidx)
-        for _ in range(cur.level - node.level):
+        while node.level != cur.level + 1:
             cur = cur.parent
-        cur.children.append(node)
         node.parent = cur
+        node.parent.children.append(node)
         cur = node
     return root
