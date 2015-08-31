@@ -2,13 +2,16 @@ from .clock import is_clock, Clock
 from .node import is_text, Node
 
 
+CHARSET = 'utf-8'
+
+
 def parse_lines(lines):
     root = Node()
     cur = root
     lineidx = 0
     for line in lines:
         lineidx += 1
-        line = line.strip()
+        line = line.strip().decode(CHARSET)
         if not line:
             continue
         if is_clock(line):

@@ -1,7 +1,7 @@
 import sys
 import vim
 from difflib import SequenceMatcher
-from .parser import parse_lines
+from .parser import parse_lines, CHARSET
 from .clock import Clock
 from .node import NoRunningClockError
 
@@ -54,7 +54,7 @@ def node_under_cursor(tree=None):
 
 
 def update(new):
-    new = str(new).split('\n')
+    new = unicode(new).encode(CHARSET).split('\n')
     diff = SequenceMatcher(a=vim.current.buffer, b=new)
     offset = 0
     for action, i1, i2, j1, j2 in diff.get_opcodes():

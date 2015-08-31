@@ -44,9 +44,9 @@ class Node(BaseNode):
         if ret:
             ret.append('\n')
         for clock in self.clocks:
-            ret.append(indent(self.level + 1, str(clock)))
-        ret += [str(node) for node in self.children]
-        return "".join(ret)
+            ret.append(indent(self.level + 1, unicode(clock)))
+        ret += [unicode(node) for node in self.children]
+        return u"".join(ret)
 
     def node_by_line(self, lineidx):
         todo = [self]
