@@ -73,12 +73,16 @@ class Node(BaseNode):
         return best_node
 
     def get_running_clock(self):
+        for clock in self.clock_iterator():
+            if not clock.end:
+                return clock
+        raise NoRunningClockError("unable to find a running clock")
+
+    def clock_iterator(self):
         todo = [self]
         while todo:
             cur = todo.pop(0)
             for clock in cur.clocks:
-                if not clock.end:
-                    return clock
+                yield clock
             if cur.children:
                 todo += cur.children
-        raise NoRunningClockError("unable to find a running clock")
