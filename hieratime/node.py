@@ -1,10 +1,17 @@
 import re
+from datetime import timedelta
 from .base_node import BaseNode
 from .format import indent
+from .clock import format_duration
 
 LEVELCHAR = '*'
 HEADING_RE = re.compile(r'^(?P<level>' + re.escape(LEVELCHAR) + r'+)\s*'
     '(?P<heading>.*?)(\s+:(?P<tags>[^:]+):)?\s*$')
+COMMENT_RE = re.compile(r'^\s*#')
+
+
+def is_autotext(line):
+    return COMMENT_RE.match(line)
 
 
 def is_text(line):
@@ -43,6 +50,13 @@ class Node(BaseNode):
             ret.append(' :' + ','.join(self.tags) + ':')
         if ret:
             ret.append('\n')
+        if self.clocks:
+            duration = timedelta()
+            for clock in self.clocks:
+                if clock.end:
+                    duration += clock.duration
+            ret.append(indent(self.level + 1,
+                '# CLOCK-SUMMARY: ' + format_duration(duration)))
         for clock in self.clocks:
             ret.append(indent(self.level + 1, unicode(clock)))
         ret += [unicode(node) for node in self.children]

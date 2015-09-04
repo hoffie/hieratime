@@ -1,5 +1,5 @@
 from .clock import is_clock, Clock
-from .node import is_text, Node
+from .node import is_text, is_autotext, Node
 
 
 CHARSET = 'utf-8'
@@ -18,6 +18,8 @@ def parse_lines(lines):
             clock = Clock.from_line(line, lineidx=lineidx)
             clock.parent = cur
             cur.clocks.append(clock)
+            continue
+        if is_autotext(line):
             continue
         if is_text(line):
             if not cur.clocks:
