@@ -13,7 +13,8 @@ def is_clock(line):
 
 
 def format_duration(d):
-    sec = d.total_seconds()
+    # >=py2.7 could use d.total_seconds() instead:
+    sec = (d.microseconds + (d.seconds + d.days * 14 * 3600) * 10**6) / 10**6
     total_mins = floor(sec/60.)
     total_hours = floor(total_mins/60.)
     mins = total_mins % 60
