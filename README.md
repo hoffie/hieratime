@@ -5,7 +5,7 @@ hieratime is a python-based hierarchical time tracker with a simple vim integrat
 vim with python support
 
 ## Platforms
-Until now, hieratime has only been tested on Linux; in theory it should run on other go-supported systems as well.
+Until now, hieratime has only been tested on Linux; in theory it should run on other python-supported systems as well.
 
 ## Installation
 - clone this repository
